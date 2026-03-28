@@ -1,0 +1,74 @@
+{
+  "coleccionables": [
+    {
+      "nombre": "Apple",
+      "rareza": "Comun",
+      "valor": 10,
+      "iconoId": "Apple"
+    },
+    {
+      "nombre": "Bananas",
+      "rareza": "Comun",
+      "valor": 12,
+      "iconoId": "Bananas"
+    },
+    {
+      "nombre": "Cherries",
+      "rareza": "Raro",
+      "valor": 20,
+      "iconoId": "Cherries"
+    },
+    {
+      "nombre": "Kiwi",
+      "rareza": "Raro",
+      "valor": 25,
+      "iconoId": "Kiwi"
+    },
+    {
+      "nombre": "Melon",
+      "rareza": "Epico",
+      "valor": 40,
+      "iconoId": "Melon"
+    },
+    {
+      "nombre": "Orange",
+      "rareza": "Comun",
+      "valor": 15,
+      "iconoId": "Orange"
+    },
+    {
+      "nombre": "Pineapple",
+      "rareza": "Epico",
+      "valor": 50,
+      "iconoId": "Pineapple"
+    },
+    {
+      "nombre": "Strawberry",
+      "rareza": "Raro",
+      "valor": 30,
+      "iconoId": "Strawberry"
+    }
+  ],
+  "misiones": [
+    {
+      "id": 1,
+      "titulo": "Recolector básico",
+      "descripcion": "Recolecta 5 frutas cualquiera."
+    },
+    {
+      "id": 2,
+      "titulo": "Amante de las manzanas",
+      "descripcion": "Recolecta 3 Apple."
+    },
+    {
+      "id": 3,
+      "titulo": "Frutas raras",
+      "descripcion": "Consigue al menos 2 frutas raras (Cherries, Kiwi o Strawberry)."
+    },
+    {
+      "id": 4,
+      "titulo": "Gran cosecha",
+      "descripcion": "Recolecta 1 Pineapple y 1 Melon."
+    }
+  ]
+}
