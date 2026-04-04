@@ -53,22 +53,54 @@
     {
       "id": 1,
       "titulo": "Recolector básico",
-      "descripcion": "Recolecta 5 frutas cualquiera."
+      "descripcion": "Recolecta 5 frutas cualquiera.",
+      "objetivos": [
+        {
+          "fruta": "Any",
+          "cantidad": 5
+        }
+      ],
+      "recompensaPuntos": 100
     },
     {
       "id": 2,
       "titulo": "Amante de las manzanas",
-      "descripcion": "Recolecta 3 Apple."
+      "descripcion": "Recolecta 3 Apple.",
+      "objetivos": [
+        {
+          "fruta": "Apple",
+          "cantidad": 3
+        }
+      ],
+      "recompensaPuntos": 300
     },
     {
       "id": 3,
       "titulo": "Frutas raras",
-      "descripcion": "Consigue al menos 2 frutas raras (Cherries, Kiwi o Strawberry)."
+      "descripcion": "Consigue al menos 2 frutas raras (Cherries, Kiwi o Strawberry).",
+      "objetivos": [
+        {
+          "fruta": "Raras",
+          "cantidad": 2
+        }
+      ],
+      "recompensaPuntos": 500
     },
     {
       "id": 4,
       "titulo": "Gran cosecha",
-      "descripcion": "Recolecta 1 Pineapple y 1 Melon."
+      "descripcion": "Recolecta 2 Apple y 1 Banana.",
+      "objetivos": [
+        {
+          "fruta": "Apple",
+          "cantidad": 2
+        },
+        {
+          "fruta": "Bananas",
+          "cantidad": 1
+        }
+      ],
+      "recompensaPuntos": 200
     }
   ]
 }
