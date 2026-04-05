@@ -47,6 +47,6 @@ public class MovePlayer : MonoBehaviour
         animator.SetBool("InGround",groundCheck);
 
         bool isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundDistance, groundLayer);
-        Debug.Log(isGrounded);
+        //Debug.Log(isGrounded);
     }
 }

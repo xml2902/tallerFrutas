@@ -1,23 +1,44 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;                  
+using UnityEngine.SceneManagement;
 
-public class LoaderScene : MonoBehaviour
+public class LoaderScenes : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+   
+    public GameObject panelInfo;
+
+    
+    public void LoadScene(string nameScene)
     {
-        
+        SceneManager.LoadScene(nameScene);
     }
 
-    // Update is called once per frame
-    void Update()
+    
+    public void SalirJuego()
     {
-        
+        Debug.Log("Cerrando aplicación...");
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
     }
 
-    public void LoadScene(string NameScene)
+   
+    public void MostrarInfo()
     {
-        SceneManager.LoadScene(NameScene);
+        if (panelInfo != null)
+        {
+            panelInfo.SetActive(true);
+        }
     }
 
+   
+    public void OcultarInfo()
+    {
+        if (panelInfo != null)
+        {
+            panelInfo.SetActive(false);
+        }
+    }
 }
