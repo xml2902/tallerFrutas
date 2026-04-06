@@ -15,8 +15,8 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Scene2.unity
     guid: cc16d83c25eea5c48aa98e37fad00b0c
   - enabled: 1
-    path: Assets/Game/Scenes/Scene3.unity
-    guid: b0592f18375dc0c4cbc086524c97e3fd
+    path: Assets/Game/Scenes/SceneDeath.unity
+    guid: 3dbb4c85c0efe864484c8dbce360f4a6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -15,11 +15,29 @@ public class MovePlayer : MonoBehaviour
     private Vector2 moveInput;
     private Animator animator;
 
+    //private bool isGrounded;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
+
+    //private void Update()
+    //{
+    //    // ✅ Detectar suelo TODO el tiempo
+    //    Transform GroundCheck = this.GroundCheck;
+    //    isGrounded = Physics2D.Raycast(
+    //        GroundCheck.position,
+    //        Vector2.down,
+    //        groundDistance,
+    //        groundLayer
+    //    );
+
+    //    animator.SetBool("InGround", isGrounded);
+    //    Debug.DrawRay(GroundCheck.position, Vector2.down * groundDistance, Color.red);
+    //}
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -28,6 +46,15 @@ public class MovePlayer : MonoBehaviour
         animator.SetFloat("MoveInX", Mathf.Abs(moveInput.x));
     }
 
+
+
+    //public void OnJump(InputAction.CallbackContext context)
+    //{
+    //    if (context.performed && isGrounded) // ✅ usa la global
+    //    {
+    //        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+    //    }
+    //}
     public void OnJump(InputAction.CallbackContext context)
     {
         bool isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundDistance, groundLayer);
@@ -38,15 +65,18 @@ public class MovePlayer : MonoBehaviour
         }
     }
 
-   
+
 
     private void FixedUpdate()
     {
+        
         rb.linearVelocity = new Vector2(moveInput.x * speed, rb.linearVelocity.y);
 
-        animator.SetBool("InGround",groundCheck);
+        animator.SetBool("InGround", groundCheck);
 
         bool isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundDistance, groundLayer);
         Debug.Log(isGrounded);
     }
+
+
 }

@@ -1,29 +1,26 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Muerte : MonoBehaviour
+public class ZonaMuerte : MonoBehaviour
 {
-    public GameObject panelMuerte;
+
+    [SerializeField] private string SceneDeath;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Muerte"))
+        if (collision.CompareTag("Player"))
         {
-            Morir();
+            SceneManager.LoadScene(SceneDeath);
         }
     }
 
-    void Morir()
-    {
-        panelMuerte.SetActive(true);
-        Time.timeScale = 0f; // pausa el juego (opcional)
-    }
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        panelMuerte.SetActive(false); // oculto al inicio
+        
     }
 
     // Update is called once per frame
