@@ -960,6 +960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f63bd549b363cf4db38bbffac8d5ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoaderScene
+  panelInfo: {fileID: 0}
 --- !u!4 &1001696977
 Transform:
   m_ObjectHideFlags: 0

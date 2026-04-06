@@ -8,6 +8,7 @@ public class ControllerScene2 : MonoBehaviour
     public Timer tiempoScene;
     public GameDataLoader dataLoader;
     public MissionManager missionManager;
+    
 
     [Header("Panel de Misión Inicial")]
     public GameObject panelMision;
@@ -24,11 +25,14 @@ public class ControllerScene2 : MonoBehaviour
     [Header("UI Misión")]
     public TextMeshProUGUI txtProgresoMision;
 
+    
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ShowTimeGameManager();
         PrepararNivel();
+        
     }
 
     // Update is called once per frame
@@ -36,31 +40,72 @@ public class ControllerScene2 : MonoBehaviour
     {
         GetCountItems();
         ActualizarTextoMision();
-        ChequearAvanceDeNivel();
+        //ChequearAvanceDeNivel();
     }
+
+    //private void PrepararNivel()
+    //{
+    //    if (dataLoader == null) return;
+
+    //    dataLoader.ConfigurarEscenaAleatoria( missionManager);
+
+    //    MostrarPanelMision();
+    //}
+
+
+
+
+    //preparar nivel actualizado
 
     private void PrepararNivel()
     {
-        if (dataLoader == null) return;
+        if (dataLoader == null || missionManager == null) return;
 
-        dataLoader.ConfigurarEscena(1, missionManager);
+        
+        dataLoader.ConfigurarEscenaAleatoria(missionManager);
 
-        MostrarPanelMision();
-    }
-
-    private void MostrarPanelMision()
-    {
+        
         MisionData mision = missionManager.GetMisionActiva();
 
-        if (mision != null && panelMision != null)
+        if (mision == null)
         {
-            txtTituloPanel.text = mision.titulo;
-            txtDescPanel.text = mision.descripcion;
+            Debug.LogError("No hay misión activa");
+            return;
+        }  
 
-            panelMision.SetActive(true);
-            Time.timeScale = 0f;
-        }
+        MostrarPanelMision(mision);
+
+        
     }
+
+    //panel actualizado
+    private void MostrarPanelMision(MisionData mision)
+{
+    if (mision != null && panelMision != null)
+    {
+        txtTituloPanel.text = mision.titulo;
+        txtDescPanel.text = mision.descripcion;
+
+        panelMision.SetActive(true);
+        Time.timeScale = 0f;
+    }
+}
+
+
+
+    //private void MostrarPanelMision()
+    //{
+    //    MisionData mision = missionManager.GetMisionActiva();
+
+    //    if (mision != null && panelMision != null)
+    //    {
+    //        txtTituloPanel.text = mision.titulo;
+    //        txtDescPanel.text = mision.descripcion;
+
+    //        panelMision.SetActive(true);
+    //        Time.timeScale = 0f;
+    //    }
+    //}
 
     public void ComenzarNivel()
     {
@@ -89,15 +134,15 @@ public class ControllerScene2 : MonoBehaviour
         }
     }
 
-    private void ChequearAvanceDeNivel()
-    {
-        if (missionManager != null && missionManager.VerificarMision())
-        {
-            Debug.Log("¡Misión cumplida! Avanzando al Nivel 3...");
-            GetTimePassGM();
-            SceneManager.LoadScene("Scene3");
-        }
-    }
+    //private void ChequearAvanceDeNivel()
+    //{
+    //    if (missionManager != null && missionManager.VerificarMision())
+    //    {
+    //        Debug.Log("¡Misión cumplida! Avanzando al Nivel 3...");
+    //        GetTimePassGM();
+    //        SceneManager.LoadScene("Scene3");
+    //    }
+    //}
 
     public void ShowTimeGameManager()
     {

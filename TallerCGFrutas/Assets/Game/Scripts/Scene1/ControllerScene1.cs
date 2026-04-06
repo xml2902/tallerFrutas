@@ -104,6 +104,7 @@ public class ControllerScene1 : MonoBehaviour
             Debug.Log("¡Misión cumplida! Avanzando al Nivel 2...");
             GetTimePassGM();
             SceneManager.LoadScene("Scene2");
+            Time.timeScale = 1f;
         }
     }
 }

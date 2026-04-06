@@ -41,6 +41,15 @@ public class GameDataLoader : MonoBehaviour
         return null;
     }
 
+    public MisionData ObtenerMisionAleatoria()
+    {
+        if (gameData == null || gameData.misiones == null || gameData.misiones.Length == 0)
+            return null;
+
+        int randomIndex = UnityEngine.Random.Range(0, gameData.misiones.Length);
+        return gameData.misiones[randomIndex];
+    }
+
     public ColeccionableData ObtenerColeccionablePorNombre(string nombre)
     {
         if (gameData == null || gameData.coleccionables == null) return null;
@@ -71,7 +80,26 @@ public class GameDataLoader : MonoBehaviour
         {
             manager.AsignarMision(mision);
         }
-    } 
+    }
+
+
+    //Esto deberia de ayudar a generar la mision aleatoriamente.
+    public void ConfigurarEscenaAleatoria(MissionManager manager)
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ReiniciarContadores();
+            Debug.Log("GameManager reiniciado.");
+        }
+
+        MisionData mision = ObtenerMisionAleatoria();
+
+        if (mision != null && manager != null)
+        {
+            manager.AsignarMision(mision);
+            Debug.Log("Misión aleatoria asignada: " + mision.titulo);
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -84,4 +112,6 @@ public class GameDataLoader : MonoBehaviour
     {
         
     }
+
+    
 }
