@@ -25,28 +25,10 @@
       "iconoId": "Kiwi"
     },
     {
-      "nombre": "Melon",
-      "rareza": "Epico",
-      "valor": 40,
-      "iconoId": "Melon"
-    },
-    {
       "nombre": "Orange",
       "rareza": "Comun",
       "valor": 15,
       "iconoId": "Orange"
-    },
-    {
-      "nombre": "Pineapple",
-      "rareza": "Epico",
-      "valor": 50,
-      "iconoId": "Pineapple"
-    },
-    {
-      "nombre": "Strawberry",
-      "rareza": "Raro",
-      "valor": 30,
-      "iconoId": "Strawberry"
     }
   ],
   "misiones": [
@@ -77,7 +59,7 @@
     {
       "id": 3,
       "titulo": "Frutas raras",
-      "descripcion": "Consigue al menos 2 frutas raras (Cherries, Kiwi o Strawberry).",
+      "descripcion": "Consigue al menos 2 frutas raras (Cherries o Kiwi).",
       "objetivos": [
         {
           "fruta": "Raras",

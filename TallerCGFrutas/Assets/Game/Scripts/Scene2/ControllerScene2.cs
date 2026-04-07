@@ -1,14 +1,16 @@
+using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ControllerScene2 : MonoBehaviour
 {
-
+    [Header("Referencias de Lógica")]
     public Timer tiempoScene;
     public GameDataLoader dataLoader;
     public MissionManager missionManager;
-    
+    public ItemSpawner itemSpawner;
 
     [Header("Panel de Misión Inicial")]
     public GameObject panelMision;
@@ -25,87 +27,76 @@ public class ControllerScene2 : MonoBehaviour
     [Header("UI Misión")]
     public TextMeshProUGUI txtProgresoMision;
 
-    
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Time.timeScale = 1f;
         ShowTimeGameManager();
-        PrepararNivel();
-        
+        StartCoroutine(PrepararEscena2());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        GetCountItems();
         ActualizarTextoMision();
-        //ChequearAvanceDeNivel();
+        GetCountItems();
     }
 
-    //private void PrepararNivel()
-    //{
-    //    if (dataLoader == null) return;
-
-    //    dataLoader.ConfigurarEscenaAleatoria( missionManager);
-
-    //    MostrarPanelMision();
-    //}
-
-
-
-
-    //preparar nivel actualizado
-
-    private void PrepararNivel()
+    IEnumerator PrepararEscena2()
     {
-        if (dataLoader == null || missionManager == null) return;
+        while (dataLoader == null || dataLoader.gameData == null)
+        {
+            yield return null;
+        }
 
-        
+        while (dataLoader.gameData.misiones == null)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        Debug.Log("ControllerScene2: Datos confirmados. Configurando misión...");
+
         dataLoader.ConfigurarEscenaAleatoria(missionManager);
 
-        
+        yield return new WaitForEndOfFrame();
+
         MisionData mision = missionManager.GetMisionActiva();
 
-        if (mision == null)
+        if (mision != null)
         {
-            Debug.LogError("No hay misión activa");
-            return;
-        }  
+            Debug.Log("ControllerScene2: Misión obtenida: " + mision.titulo);
 
-        MostrarPanelMision(mision);
+            if (itemSpawner != null)
+            {
+                itemSpawner.usarMisionParaSpawn = true; 
+                itemSpawner.EjecutarSpawnMision();
+            }
 
-        
+            if (txtTituloPanel != null) txtTituloPanel.text = mision.titulo;
+            if (txtDescPanel != null) txtDescPanel.text = mision.descripcion;
+
+            if (panelMision != null)
+            {
+                panelMision.SetActive(true);
+                Time.timeScale = 0f;
+            }
+        }
+        else
+        {
+            Debug.LogError("ControllerScene2: No se encontró misión activa.");
+        }
     }
 
-    //panel actualizado
     private void MostrarPanelMision(MisionData mision)
-{
-    if (mision != null && panelMision != null)
     {
-        txtTituloPanel.text = mision.titulo;
-        txtDescPanel.text = mision.descripcion;
-
-        panelMision.SetActive(true);
-        Time.timeScale = 0f;
+        if (mision != null && panelMision != null)
+        {
+            txtTituloPanel.text = mision.titulo;
+            txtDescPanel.text = mision.descripcion;
+            panelMision.SetActive(true);
+            Time.timeScale = 0f;
+        }
     }
-}
-
-
-
-    //private void MostrarPanelMision()
-    //{
-    //    MisionData mision = missionManager.GetMisionActiva();
-
-    //    if (mision != null && panelMision != null)
-    //    {
-    //        txtTituloPanel.text = mision.titulo;
-    //        txtDescPanel.text = mision.descripcion;
-
-    //        panelMision.SetActive(true);
-    //        Time.timeScale = 0f;
-    //    }
-    //}
 
     public void ComenzarNivel()
     {
@@ -113,45 +104,44 @@ public class ControllerScene2 : MonoBehaviour
         {
             panelMision.SetActive(false);
             Time.timeScale = 1f;
-            Debug.Log("¡Nivel 2 iniciado!");
+            Debug.Log("¡Nivel 2 iniciado oficialmente!");
         }
     }
 
     public void GetCountItems()
     {
-        txtCountVApple.text = GameManager.Instance.TotalApple.ToString();
-        txtCountVOranges.text = GameManager.Instance.TotalOrange.ToString();
-        txtCountVBanana.text = GameManager.Instance.TotalBanana.ToString();
-        txtCountVCherries.text = GameManager.Instance.TotalCherries.ToString();
-        txtCountVKiwi.text = GameManager.Instance.TotalKiwi.ToString();
+        if (GameManager.Instance != null)
+        {
+            if (txtCountVApple) txtCountVApple.text = GameManager.Instance.TotalApple.ToString();
+            if (txtCountVOranges) txtCountVOranges.text = GameManager.Instance.TotalOrange.ToString();
+            if (txtCountVBanana) txtCountVBanana.text = GameManager.Instance.TotalBanana.ToString();
+            if (txtCountVCherries) txtCountVCherries.text = GameManager.Instance.TotalCherries.ToString();
+            if (txtCountVKiwi) txtCountVKiwi.text = GameManager.Instance.TotalKiwi.ToString();
+        }
     }
 
     private void ActualizarTextoMision()
     {
-        if (txtProgresoMision != null && missionManager != null)
+        if (txtProgresoMision != null && missionManager != null && missionManager.GetMisionActiva() != null)
         {
             txtProgresoMision.text = "Misión: " + missionManager.ObtenerTextoProgreso();
         }
     }
 
-    //private void ChequearAvanceDeNivel()
-    //{
-    //    if (missionManager != null && missionManager.VerificarMision())
-    //    {
-    //        Debug.Log("¡Misión cumplida! Avanzando al Nivel 3...");
-    //        GetTimePassGM();
-    //        SceneManager.LoadScene("Scene3");
-    //    }
-    //}
-
     public void ShowTimeGameManager()
     {
-        Debug.Log("Tiempo que paso en escena 1 " + GameManager.Instance.GlobalTime);
+        if (GameManager.Instance != null)
+        {
+            Debug.Log("Tiempo acumulado: " + GameManager.Instance.GlobalTime);
+        }
     }
 
     public void GetTimePassGM()
     {
-        float timeStop = tiempoScene.StopTime;
-        GameManager.Instance.TotalTime(timeStop);
+        if (tiempoScene != null && GameManager.Instance != null)
+        {
+            float timeStop = tiempoScene.StopTime;
+            GameManager.Instance.TotalTime(timeStop);
+        }
     }
 }

@@ -1314,15 +1314,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemSpawner
   dataLoader: {fileID: 690022063}
   itemPrefab: {fileID: 5504588505357056766, guid: 12d7fb007b256ea43b660c87fc2babdd, type: 3}
-  missionManager: {fileID: 0}
+  missionManager: {fileID: 1889014698}
+  usarMisionParaSpawn: 1
   itemsASpawnear:
   - itemName: Apple
     cantidad: 3
   - itemName: Orange
     cantidad: 2
   - itemName: Bananas
-    cantidad: 1
+    cantidad: 2
   - itemName: Cherries
+    cantidad: 2
+  - itemName: Kiwi
     cantidad: 2
   spawnPoints:
   - {fileID: 504448075}
@@ -2085,6 +2088,7 @@ MonoBehaviour:
   tiempoScene: {fileID: 818250498}
   dataLoader: {fileID: 690022063}
   missionManager: {fileID: 1889014698}
+  itemSpawner: {fileID: 492276753}
   panelMision: {fileID: 1552224611}
   txtTituloPanel: {fileID: 1552224610}
   txtDescPanel: {fileID: 1552224609}

@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemSpawner
   dataLoader: {fileID: 248009665}
   itemPrefab: {fileID: 5504588505357056766, guid: 12d7fb007b256ea43b660c87fc2babdd, type: 3}
-  missionManager: {fileID: 0}
+  missionManager: {fileID: 1211999756}
   itemsASpawnear:
   - itemName: Apple
     cantidad: 2
@@ -170,6 +170,7 @@ MonoBehaviour:
   - {fileID: 1620533762}
   - {fileID: 871841151}
   - {fileID: 1359126422}
+  usarMisionParaSpawn: 0
 --- !u!4 &168529741
 Transform:
   m_ObjectHideFlags: 0

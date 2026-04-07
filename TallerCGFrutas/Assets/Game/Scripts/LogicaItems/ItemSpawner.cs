@@ -6,11 +6,12 @@ public class ItemSpawner : MonoBehaviour
     [Header("Referencias")]
     [SerializeField] private GameDataLoader dataLoader;
     [SerializeField] private GameObject itemPrefab;
-
-    //REFERENCIA PARA conectar la mision aleatoria con el spawn de los items
     [SerializeField] private MissionManager missionManager;
 
-    [Header("Configuración de spawn")]
+    [Header("Modo de Funcionamiento")]
+    public bool usarMisionParaSpawn = false;
+
+    [Header("Configuración Manual (Escena 1)")]
     [SerializeField] private List<SpawnItemConfig> itemsASpawnear;
 
     [Header("Puntos de spawn")]
@@ -18,129 +19,109 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnItems();
+        if (!usarMisionParaSpawn)
+        {
+            SpawnItemsManual();
+        }
     }
 
-    void SpawnItems()
+    public void EjecutarSpawnMision()
     {
-        int spawnIndex = 0;
-
-        foreach (var config in itemsASpawnear)
+        if (missionManager == null || dataLoader == null)
         {
-            // Buscar datos en el JSON
-            ColeccionableData data = dataLoader.ObtenerColeccionablePorNombre(config.itemName);
+            Debug.LogError("ItemSpawner: Faltan referencias de MissionManager o DataLoader.");
+            return;
+        }
 
-            if (data == null)
+        MisionData mision = missionManager.GetMisionActiva();
+        if (mision == null || mision.objetivos == null)
+        {
+            Debug.LogWarning("ItemSpawner: No hay misión activa detectada.");
+            return;
+        }
+
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogError("ItemSpawner: ¡No has asignado Puntos de Spawn!");
+            return;
+        }
+
+        int spawnIndex = 0;
+        foreach (var objetivo in mision.objetivos)
+        {
+            List<ColeccionableData> posiblesFrutas = new List<ColeccionableData>();
+
+            if (objetivo.fruta == "Any")
             {
-                Debug.LogWarning("No existe en JSON: " + config.itemName);
+                if (dataLoader.gameData.coleccionables != null)
+                {
+                    posiblesFrutas.AddRange(dataLoader.gameData.coleccionables);
+                }
+            }
+            else if (objetivo.fruta == "Raras")
+            {
+                foreach (var f in dataLoader.gameData.coleccionables)
+                {
+                    if (f.rareza == "Raro")
+                    {
+                        posiblesFrutas.Add(f);
+                    }
+                }
+            }
+            else
+            {
+                ColeccionableData dataCerrada = dataLoader.ObtenerColeccionablePorNombre(objetivo.fruta);
+                if (dataCerrada != null) posiblesFrutas.Add(dataCerrada);
+            }
+
+            if (posiblesFrutas.Count == 0)
+            {
+                Debug.LogError($"ItemSpawner: No se encontró ninguna fruta válida para '{objetivo.fruta}' en el JSON.");
                 continue;
             }
 
+            for (int i = 0; i < objetivo.cantidad; i++)
+            {
+                if (spawnIndex >= spawnPoints.Length) break;
+
+                int indiceAzar = Random.Range(0, posiblesFrutas.Count);
+                ColeccionableData frutaElegida = posiblesFrutas[indiceAzar];
+
+                InstanciarFruta(frutaElegida, spawnPoints[spawnIndex]);
+                spawnIndex++;
+            }
+        }
+        Debug.Log("ItemSpawner: Spawn de misión completado con éxito.");
+    }
+
+    void SpawnItemsManual()
+    {
+        int spawnIndex = 0;
+        foreach (var config in itemsASpawnear)
+        {
+            ColeccionableData data = dataLoader.ObtenerColeccionablePorNombre(config.itemName);
+            if (data == null) continue;
+
             for (int i = 0; i < config.cantidad; i++)
             {
-                if (spawnIndex >= spawnPoints.Length)
-                {
-                    Debug.LogWarning("No hay más puntos de spawn disponibles.");
-                    return;
-                }
-
-                Transform punto = spawnPoints[spawnIndex];
-
-                GameObject obj = Instantiate(itemPrefab, punto.position, Quaternion.identity);
-
-                ItemRecolectable_V2 item = obj.GetComponent<ItemRecolectable_V2>();
-
-                Sprite sprite = null;
-
-                //Debug.Log("Buscando: Frutas/" + data.iconoId);
-                Sprite[] sprites = Resources.LoadAll<Sprite>("Frutas/" + data.iconoId);
-                //Debug.Log("Sprites encontrados: " + sprites.Length);
-                foreach (var s in sprites)
-                {
-                    //Debug.Log("Sprite: " + s.name);
-                }
-
-                if (sprites.Length > 0)
-                {
-                    sprite = sprites[0];
-                }
-                else
-                {
-                    Debug.LogWarning("No se encontraron sprites para: " + data.iconoId);
-                }
-
-                item.Configurar(data, sprite);
-
+                if (spawnIndex >= spawnPoints.Length) break;
+                InstanciarFruta(data, spawnPoints[spawnIndex]);
                 spawnIndex++;
             }
         }
     }
 
+    private void InstanciarFruta(ColeccionableData data, Transform punto)
+    {
+        Debug.Log("Intentando spawnear: " + data.nombre); 
+        GameObject obj = Instantiate(itemPrefab, punto.position, Quaternion.identity);
+        ItemRecolectable_V2 item = obj.GetComponent<ItemRecolectable_V2>();
 
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Frutas/" + data.iconoId);
+        Sprite sprite = (sprites.Length > 0) ? sprites[0] : null;
 
-    // Nueva versión de SpawnItems que se basa en la misión activa, pero hay un problema de que si utilizo esta version no corre el juego.
-
-    //void SpawnItems()
-    //{
-    //    if (missionManager == null)
-    //    {
-    //        Debug.LogError("No hay MissionManager asignado.");
-    //        return;
-    //    }
-
-    //    MisionData mision = missionManager.GetMisionActiva();
-
-    //    if (mision == null || mision.objetivos == null)
-    //    {
-    //        Debug.LogError("No hay misión activa.");
-    //        return;
-    //    }
-
-    //    int spawnIndex = 0;
-
-    //    foreach (var objetivo in mision.objetivos)
-    //    {
-    //        // Buscar datos en JSON
-    //        ColeccionableData data = dataLoader.ObtenerColeccionablePorNombre(objetivo.fruta);
-
-    //        if (data == null)
-    //        {
-    //            Debug.LogWarning("No existe en JSON: " + objetivo.fruta);
-    //            continue;
-    //        }
-
-    //        int cantidad = objetivo.cantidad + 2; // margen extra
-
-    //        for (int i = 0; i < cantidad; i++)
-    //        {
-    //            if (spawnIndex >= spawnPoints.Length)
-    //            {
-    //                Debug.LogWarning("No hay más puntos de spawn disponibles.");
-    //                return;
-    //            }
-
-    //            Transform punto = spawnPoints[spawnIndex];
-
-    //            GameObject obj = Instantiate(itemPrefab, punto.position, Quaternion.identity);
-
-    //            ItemRecolectable_V2 item = obj.GetComponent<ItemRecolectable_V2>();
-
-    //            // Cargar sprite
-    //            Sprite[] sprites = Resources.LoadAll<Sprite>("Frutas/" + data.iconoId);
-
-    //            Sprite sprite = sprites.Length > 0 ? sprites[0] : null;
-
-    //            if (sprite == null)
-    //            {
-    //                Debug.LogWarning("No se encontró sprite para: " + data.iconoId);
-    //            }
-
-    //            item.Configurar(data, sprite);
-
-    //            spawnIndex++;
-    //        }
-    //    }
-    //}
+        item.Configurar(data, sprite);
+    }
 }
 
 [System.Serializable]
