@@ -27,7 +27,7 @@ public class MovePlayer : MonoBehaviour
 
     private void Update()
     {
-        // ✅ Detectar si está en el suelo
+        //  Detecta si está en el suelo
         isGrounded = Physics2D.Raycast(
             groundCheck.position,
             Vector2.down,
@@ -35,10 +35,10 @@ public class MovePlayer : MonoBehaviour
             groundLayer
         );
 
-        // ✅ Actualizar animación
+        //  Actualiza animacion
         animator.SetBool("InGround", isGrounded);
 
-        // ✅ Dibujar el raycast en escena
+        //  Dibuja el raycast en escena
         Debug.DrawRay(groundCheck.position, Vector2.down * groundDistance, Color.red);
     }
 
@@ -59,7 +59,7 @@ public class MovePlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // ✅ Movimiento horizontal
+        // Movimiento horizontal
         rb.linearVelocity = new Vector2(moveInput.x * speed, rb.linearVelocity.y);
     }
 }
